@@ -5,9 +5,16 @@ import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import pl.rabczynski.openbook.book.BookEntity;
+import pl.rabczynski.openbook.book.domain.BookEntity;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,9 +41,9 @@ public class AuthorEntity {
     )
     private Set<BookEntity> books = new HashSet<>();
 
-    public void addBook(BookEntity bookEntity) {
-        this.books.add(bookEntity);
-        bookEntity.addAuthor(this);
+    public void addBook(BookEntity book) {
+        this.books.add(book);
+        book.addAuthor(this);
     }
 
 

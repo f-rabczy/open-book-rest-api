@@ -1,4 +1,4 @@
-package pl.rabczynski.openbook.book;
+package pl.rabczynski.openbook.book.domain;
 
 import lombok.SneakyThrows;
 import org.apache.commons.csv.CSVFormat;
@@ -8,15 +8,18 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import pl.rabczynski.openbook.author.AuthorEntity;
-import pl.rabczynski.openbook.author.AuthorService;
+import pl.rabczynski.openbook.author.AuthorFacade;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-class BookTableInit implements ApplicationListener<ContextRefreshedEvent> {
+class BookDatabaseLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     private static final String FILE_NAME = "E:\\IdeaProjects\\open-book\\src\\main\\resources\\static\\books_database.csv";
     private static final String AUTHORS_COLUMN = "authors";
@@ -32,59 +35,57 @@ class BookTableInit implements ApplicationListener<ContextRefreshedEvent> {
     private static final String FIVE_STAR_RATING_COLUMN = "ratings_5";
     private static final String IMAGE_URL_COLUMN = "image_url";
 
-    private final BookRepository bookRepository;
-    private final AuthorService authorService;
+    private final BookFacade bookFacade;
+    private final AuthorFacade authorFacade;
     private final Set<String> optimizationAuthorsSet = new HashSet<>();
 
-    BookTableInit(final BookRepository bookRepository,
-                  final AuthorService authorService) {
-        this.bookRepository = bookRepository;
-        this.authorService = authorService;
+    BookDatabaseLoader(final BookFacade bookFacade,
+                       final AuthorFacade authorFacade) {
+        this.bookFacade = bookFacade;
+        this.authorFacade = authorFacade;
     }
-
 
     @SneakyThrows
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-//        readRecordsAndCreateEntities();
+//      readRecordsAndCreateEntities();
     }
-
 
     private void readRecordsAndCreateEntities() throws IOException {
         Iterable<CSVRecord> csvRecords = getCSVRecords();
 
         for (CSVRecord csvRecord : csvRecords) {
 
-            BookEntity bookEntity = convertCsvRecordToBook(csvRecord);
+            BookEntity book = convertCsvRecordToBook(csvRecord);
             String authorsColumn = csvRecord.get(AUTHORS_COLUMN);
 
             if (authorsColumn.contains(",")) {
-                addMultipleAuthors(authorsColumn, bookEntity);
+                addMultipleAuthors(authorsColumn, book);
             } else {
-                addSingleAuthor(authorsColumn, bookEntity);
+                addSingleAuthor(authorsColumn, book);
             }
 
-            bookRepository.save(bookEntity);
-            authorService.saveAll(bookEntity.getAuthors());
-            addToOptimizationSet(bookEntity.getAuthors());
+            bookFacade.save(book);
+            authorFacade.saveAll(book.getAuthors());
+            addToOptimizationSet(book.getAuthors());
         }
     }
 
-    private void addSingleAuthor(String authorName, BookEntity bookEntity) {
+    private void addSingleAuthor(String authorName, BookEntity book) {
         var author = new AuthorEntity();
         if (optimizationAuthorsSet.contains(authorName)) {
-            author = authorService.getAuthorByFullName(authorName);
+            author = authorFacade.getAuthorByFullName(authorName);
         } else {
             author.setFullName(authorName);
         }
-        author.addBook(bookEntity);
+        author.addBook(book);
 
     }
 
-    private void addMultipleAuthors(String authorsNames, BookEntity bookEntity) {
+    private void addMultipleAuthors(String authorsNames, BookEntity book) {
         String[] namesArray = authorsNames.split(",");
         for (String authorName : namesArray) {
-            addSingleAuthor(authorName, bookEntity);
+            addSingleAuthor(authorName, book);
         }
     }
 
@@ -124,6 +125,5 @@ class BookTableInit implements ApplicationListener<ContextRefreshedEvent> {
                         .map(AuthorEntity::getFullName)
                         .collect(Collectors.toSet()));
     }
-
 
 }

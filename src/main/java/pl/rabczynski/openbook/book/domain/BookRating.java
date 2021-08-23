@@ -1,4 +1,4 @@
-package pl.rabczynski.openbook.book;
+package pl.rabczynski.openbook.book.domain;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,6 +9,7 @@ import javax.persistence.Embeddable;
 @Getter
 @Setter
 class BookRating {
+
     private int oneStar;
     private int twoStar;
     private int threeStar;
@@ -31,7 +32,6 @@ class BookRating {
         this.fourStar = fourStar;
         this.fiveStar = fiveStar;
         this.ratingsCount = oneStar + twoStar + threeStar + fourStar + fiveStar;
-
     }
 
 

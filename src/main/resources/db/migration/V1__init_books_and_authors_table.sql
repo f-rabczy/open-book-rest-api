@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS  author_books  ;
-DROP TABLE IF EXISTS  authorEntities  ;
-DROP TABLE IF EXISTS  books  ;
+DROP TABLE IF EXISTS  author_books cascade  ;
+DROP TABLE IF EXISTS  authors cascade ;
+DROP TABLE IF EXISTS  books cascade ;
 
 CREATE TABLE author_books
 (
@@ -9,7 +9,7 @@ CREATE TABLE author_books
     PRIMARY KEY(author_id,book_id)
 );
 
-CREATE TABLE authorEntities
+CREATE TABLE authors
 (
     id INT PRIMARY KEY AUTO_INCREMENT,
     full_name VARCHAR(30) NOT NULL
@@ -34,4 +34,4 @@ CREATE TABLE books
 
 
 ALTER TABLE author_books ADD CONSTRAINT FK_BOOK_AUTHOR FOREIGN KEY (book_id) references books(id);
-ALTER TABLE author_books ADD CONSTRAINT FK_AUTHOR_BOOK FOREIGN KEY (author_id) references authorEntities(id);
+ALTER TABLE author_books ADD CONSTRAINT FK_AUTHOR_BOOK FOREIGN KEY (author_id) references authors(id);
