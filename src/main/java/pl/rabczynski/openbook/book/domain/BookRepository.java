@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import pl.rabczynski.openbook.book.dto.BookDTO;
 
+import java.util.Optional;
+
 
 @Repository
 interface BookRepository extends JpaRepository<BookEntity, Integer> {
@@ -17,10 +19,13 @@ interface BookRepository extends JpaRepository<BookEntity, Integer> {
     Page<BookDTO> findAllBookDto(Pageable page);
 
     @Query(value = "SELECT NEW pl.rabczynski.openbook.book.dto.BookDTO(b.id,b.isbn,b.publicationYear,b.title,b.averageRating,b.bookRating.ratingsCount)" +
-            " FROM books b WHERE b.id =?1 ")
-    BookDTO findBookDtoUsingId(Integer id);
+            " FROM books b WHERE b.id =:id ")
+    Optional<BookDTO> findBookDtoUsingId(Integer id);
 
     @Query(value = "SELECT NEW pl.rabczynski.openbook.book.dto.BookDTO(b.id,b.title,b.bookRating.oneStar,b.bookRating.twoStar,b.bookRating.threeStar,b.bookRating.fourStar," +
-            "b.bookRating.fiveStar,b.averageRating,b.bookRating.ratingsCount) FROM books b WHERE b.id =?1" )
-    BookDTO findBookDtoWithRatingUsingId(Integer id);
+            "b.bookRating.fiveStar,b.averageRating,b.bookRating.ratingsCount) FROM books b WHERE b.id =:id" )
+    Optional<BookDTO> findBookDtoWithRatingUsingId(Integer id);
+
+    @Query(value = "SELECT b.imageUrl FROM books b WHERE b.id =:id")
+    Optional<String> findBookImageUrlUsingId(Integer id);
 }

@@ -1,13 +1,19 @@
 package pl.rabczynski.openbook.book.domain;
 
+import javassist.NotFoundException;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import pl.rabczynski.openbook.author.AuthorEntity;
 import pl.rabczynski.openbook.author.AuthorFacade;
 import pl.rabczynski.openbook.author.dto.AuthorDTO;
 import pl.rabczynski.openbook.author.mapper.AuthorMapper;
 import pl.rabczynski.openbook.book.dto.BookDTO;
 
+import java.net.URI;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -17,31 +23,27 @@ import static pl.rabczynski.openbook.utill.PageHelper.FIRST_PAGE_NUMBER;
 import static pl.rabczynski.openbook.utill.PageHelper.PAGE_SIZE;
 
 @Service
+@RequiredArgsConstructor
 public class BookFacade {
 
     private final BookRepository bookRepository;
     private final AuthorFacade authorFacade;
     private final AuthorMapper authorMapper;
+    private final RestTemplate restTemplate;
 
-    public BookFacade(final BookRepository bookRepository,
-                      final AuthorFacade authorFacade,
-                      final AuthorMapper authorMapper) {
-        this.bookRepository = bookRepository;
-        this.authorFacade = authorFacade;
-        this.authorMapper = authorMapper;
+    public BookDTO getBookRating(Integer id){
+        return bookRepository.findBookDtoWithRatingUsingId(id)
+                .orElseThrow(() -> new IllegalArgumentException("No book rating found with given book id: " + id));
     }
 
-    public Optional<BookDTO> getSingleBookRating(Integer id){
-        return Optional.of(bookRepository.findBookDtoWithRatingUsingId(id));
-    }
-
-    public Optional<BookDTO> getSingleBookWithAuthors(Integer id){
-        BookDTO book = bookRepository.findBookDtoUsingId(id);
+    public BookDTO getBookWithAuthors(Integer id){
+        BookDTO book = bookRepository.findBookDtoUsingId(id)
+                .orElseThrow(() -> new IllegalArgumentException("No book found with given id: " + id));
         Set<AuthorEntity> authors = authorFacade.findAuthorsByBookId(id);
         book.setAuthors(authors.stream()
                 .map(authorMapper::authorToAuthorDTO)
                 .collect(Collectors.toSet()));
-        return Optional.of(book);
+        return book;
     }
 
     public List<BookDTO> getBooksWithAuthors(Integer page) {
@@ -57,6 +59,14 @@ public class BookFacade {
 
     public void save(BookEntity bookEntity){
         bookRepository.save(bookEntity);
+    }
+
+    @SneakyThrows
+    public byte[] getBookCover(Integer id){
+        var imageUrl = bookRepository.findBookImageUrlUsingId(id).
+                orElseThrow(() -> new IllegalArgumentException("No book's cover found with given book id: " + id));
+        return restTemplate.getForObject(new URI(imageUrl),byte[].class);
+
     }
 
     private Set<AuthorDTO> extractAuthors(List<AuthorEntity> authors, Integer id) {
