@@ -1,4 +1,4 @@
-package pl.rabczynski.openbook.book.domain;
+package pl.rabczynski.openbook.db;
 
 import lombok.SneakyThrows;
 import org.apache.commons.csv.CSVFormat;
@@ -9,11 +9,14 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import pl.rabczynski.openbook.author.AuthorEntity;
 import pl.rabczynski.openbook.author.AuthorFacade;
+import pl.rabczynski.openbook.book.domain.BookEntity;
+import pl.rabczynski.openbook.book.domain.BookFacade;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -53,18 +56,13 @@ class BookDatabaseLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     private void readRecordsAndCreateEntities() throws IOException {
         Iterable<CSVRecord> csvRecords = getCSVRecords();
-
         for (CSVRecord csvRecord : csvRecords) {
-
             BookEntity book = convertCsvRecordToBook(csvRecord);
             String authorsColumn = csvRecord.get(AUTHORS_COLUMN);
-
-            if (authorsColumn.contains(",")) {
+            if (authorsColumn.contains(","))
                 addMultipleAuthors(authorsColumn, book);
-            } else {
+            else
                 addSingleAuthor(authorsColumn, book);
-            }
-
             bookFacade.save(book);
             authorFacade.saveAll(book.getAuthors());
             addToOptimizationSet(book.getAuthors());
@@ -73,20 +71,16 @@ class BookDatabaseLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     private void addSingleAuthor(String authorName, BookEntity book) {
         var author = new AuthorEntity();
-        if (optimizationAuthorsSet.contains(authorName)) {
+        if (optimizationAuthorsSet.contains(authorName))
             author = authorFacade.getAuthorByFullName(authorName);
-        } else {
+        else
             author.setFullName(authorName);
-        }
         author.addBook(book);
-
     }
 
     private void addMultipleAuthors(String authorsNames, BookEntity book) {
         String[] namesArray = authorsNames.split(",");
-        for (String authorName : namesArray) {
-            addSingleAuthor(authorName, book);
-        }
+        Arrays.stream(namesArray).forEach(authorName -> addSingleAuthor(authorName,book));
     }
 
     private BookEntity convertCsvRecordToBook(CSVRecord csvRecord) {
