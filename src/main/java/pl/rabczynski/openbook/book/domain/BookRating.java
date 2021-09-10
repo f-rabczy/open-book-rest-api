@@ -15,7 +15,6 @@ class BookRating {
     private int threeStar;
     private int fourStar;
     private int fiveStar;
-
     private double ratingsCount;
 
     double calculateAverage() {
@@ -33,6 +32,5 @@ class BookRating {
         this.fiveStar = fiveStar;
         this.ratingsCount = oneStar + twoStar + threeStar + fourStar + fiveStar;
     }
-
 
 }

@@ -12,7 +12,6 @@ public class AuthorFacade {
 
     private final AuthorRepository authorRepository;
 
-
     AuthorFacade(AuthorRepository authorRepository) {
         this.authorRepository = authorRepository;
     }
@@ -33,7 +32,7 @@ public class AuthorFacade {
         return authorRepository.findAllByBooksIdIn(ids);
     }
 
-    public Set<AuthorEntity> findAuthorsByBookId(Integer id){
+    public Set<AuthorEntity> findAuthorsByBookId(Integer id) {
         return authorRepository.findAuthorsDTOByBooksId(id);
     }
 }

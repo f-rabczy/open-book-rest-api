@@ -23,7 +23,7 @@ interface BookRepository extends JpaRepository<BookEntity, Integer> {
     Optional<BookDTO> findBookDtoUsingId(Integer id);
 
     @Query(value = "SELECT NEW pl.rabczynski.openbook.book.dto.BookDTO(b.id,b.title,b.bookRating.oneStar,b.bookRating.twoStar,b.bookRating.threeStar,b.bookRating.fourStar," +
-            "b.bookRating.fiveStar,b.averageRating,b.bookRating.ratingsCount) FROM books b WHERE b.id =:id" )
+            "b.bookRating.fiveStar,b.averageRating,b.bookRating.ratingsCount) FROM books b WHERE b.id =:id")
     Optional<BookDTO> findBookDtoWithRatingUsingId(Integer id);
 
     @Query(value = "SELECT b.imageUrl FROM books b WHERE b.id =:id")

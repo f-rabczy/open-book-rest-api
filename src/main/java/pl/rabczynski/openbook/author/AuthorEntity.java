@@ -37,7 +37,6 @@ public class AuthorEntity {
             name = "author_books",
             joinColumns = @JoinColumn(name = "author_id"),
             inverseJoinColumns = @JoinColumn(name = "book_id")
-
     )
     private Set<BookEntity> books = new HashSet<>();
 
@@ -45,6 +44,5 @@ public class AuthorEntity {
         this.books.add(book);
         book.addAuthor(this);
     }
-
 
 }

@@ -31,12 +31,12 @@ public class BookFacade {
     private final AuthorMapper authorMapper;
     private final RestTemplate restTemplate;
 
-    public BookDTO getBookRating(Integer id){
+    public BookDTO getBookRating(Integer id) {
         return bookRepository.findBookDtoWithRatingUsingId(id)
                 .orElseThrow(() -> new IllegalArgumentException("No book rating found with given book id: " + id));
     }
 
-    public BookDTO getBookWithAuthors(Integer id){
+    public BookDTO getBookWithAuthors(Integer id) {
         BookDTO book = bookRepository.findBookDtoUsingId(id)
                 .orElseThrow(() -> new IllegalArgumentException("No book found with given id: " + id));
         Set<AuthorEntity> authors = authorFacade.findAuthorsByBookId(id);
@@ -57,15 +57,15 @@ public class BookFacade {
         return books;
     }
 
-    public void save(BookEntity bookEntity){
+    public void save(BookEntity bookEntity) {
         bookRepository.save(bookEntity);
     }
 
     @SneakyThrows
-    public byte[] getBookCover(Integer id){
+    public byte[] getBookCover(Integer id) {
         var imageUrl = bookRepository.findBookImageUrlUsingId(id).
                 orElseThrow(() -> new IllegalArgumentException("No book's cover found with given book id: " + id));
-        return restTemplate.getForObject(new URI(imageUrl),byte[].class);
+        return restTemplate.getForObject(new URI(imageUrl), byte[].class);
 
     }
 

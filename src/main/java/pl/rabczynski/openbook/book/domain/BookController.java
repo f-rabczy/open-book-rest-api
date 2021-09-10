@@ -20,25 +20,24 @@ class BookController {
     private final BookFacade bookFacade;
 
     @GetMapping
-    List<BookDTO> getBooks(@RequestParam(defaultValue = "1", required = false) Integer page){
+    List<BookDTO> getBooks(@RequestParam(defaultValue = "1", required = false) Integer page) {
         return bookFacade.getBooksWithAuthors(page);
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<BookDTO> getBook(@PathVariable Integer id){
+    ResponseEntity<BookDTO> getBook(@PathVariable Integer id) {
         return ResponseEntity.ok(bookFacade.getBookWithAuthors(id));
     }
 
     @GetMapping("/{id}/rating")
-    ResponseEntity<BookDTO> getBookRating(@PathVariable Integer id){
+    ResponseEntity<BookDTO> getBookRating(@PathVariable Integer id) {
         return ResponseEntity.ok(bookFacade.getBookRating(id));
     }
 
-    @GetMapping(value = "/{id}/cover",produces = MediaType.IMAGE_JPEG_VALUE)
-    ResponseEntity<byte[]> getBookCover(@PathVariable Integer id){
+    @GetMapping(value = "/{id}/cover", produces = MediaType.IMAGE_JPEG_VALUE)
+    ResponseEntity<byte[]> getBookCover(@PathVariable Integer id) {
         return ResponseEntity.ok(bookFacade.getBookCover(id));
     }
-
 
 
 }

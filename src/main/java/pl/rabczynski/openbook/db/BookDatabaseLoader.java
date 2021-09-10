@@ -80,7 +80,7 @@ class BookDatabaseLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     private void addMultipleAuthors(String authorsNames, BookEntity book) {
         String[] namesArray = authorsNames.split(",");
-        Arrays.stream(namesArray).forEach(authorName -> addSingleAuthor(authorName,book));
+        Arrays.stream(namesArray).forEach(authorName -> addSingleAuthor(authorName, book));
     }
 
     private BookEntity convertCsvRecordToBook(CSVRecord csvRecord) {
