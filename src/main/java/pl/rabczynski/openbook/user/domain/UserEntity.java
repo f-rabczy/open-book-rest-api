@@ -1,4 +1,4 @@
-package pl.rabczynski.openbook.user;
+package pl.rabczynski.openbook.user.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @Entity(name = "users")
 @Table(name = "users")
-class UserEntity {
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
