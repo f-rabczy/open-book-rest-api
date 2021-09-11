@@ -32,7 +32,7 @@ public class AuthorEntity {
     @NotNull
     private String fullName;
 
-    @ManyToMany()
+    @ManyToMany
     @JoinTable(
             name = "author_books",
             joinColumns = @JoinColumn(name = "author_id"),
