@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
@@ -42,7 +43,7 @@ public class BookEntity {
     private String imageUrl;
 
     @Embedded
-    private BookRating bookRating;
+    private BookRatingContainer bookRatingContainer;
 
     //TODO PREUPDATE ? PREPERSIST
 
@@ -51,13 +52,16 @@ public class BookEntity {
     @ManyToMany(mappedBy = "books", cascade = CascadeType.MERGE)
     private Set<AuthorEntity> authors = new HashSet<>();
 
+    @OneToMany(mappedBy = "book")
+    private Set<BookRatingEntity> ratings = new HashSet<>();
+
 
     public void addAuthor(AuthorEntity author) {
         this.authors.add(author);
     }
 
     public void initializeBookRating(int oneStar, int twoStar, int threeStar, int fourStar, int fiveStar) {
-        this.bookRating = new BookRating(oneStar, twoStar, threeStar, fourStar, fiveStar);
-        this.averageRating = bookRating.calculateAverage();
+        this.bookRatingContainer = new BookRatingContainer(oneStar, twoStar, threeStar, fourStar, fiveStar);
+        this.averageRating = bookRatingContainer.calculateAverage();
     }
 }
