@@ -55,6 +55,8 @@ public class BookEntity {
     @OneToMany(mappedBy = "book")
     private Set<BookRatingEntity> ratings = new HashSet<>();
 
+    @OneToMany(mappedBy = "book")
+    private Set<BookReviewEntity> reviews = new HashSet<>();
 
     public void addAuthor(AuthorEntity author) {
         this.authors.add(author);
