@@ -1,6 +1,7 @@
 package pl.rabczynski.openbook.book.domain;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Embeddable;
@@ -8,7 +9,8 @@ import javax.persistence.Embeddable;
 @Embeddable
 @Getter
 @Setter
-class BookRating {
+@NoArgsConstructor
+class BookRatingContainer {
 
     private int oneStar;
     private int twoStar;
@@ -21,10 +23,7 @@ class BookRating {
         return (oneStar + twoStar * 2 + threeStar * 3 + fourStar * 4 + fiveStar * 5) / ratingsCount;
     }
 
-    public BookRating() {
-    }
-
-    public BookRating(int oneStar, int twoStar, int threeStar, int fourStar, int fiveStar) {
+    public BookRatingContainer(int oneStar, int twoStar, int threeStar, int fourStar, int fiveStar) {
         this.oneStar = oneStar;
         this.twoStar = twoStar;
         this.threeStar = threeStar;
