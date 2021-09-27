@@ -39,5 +39,4 @@ class BookController {
         return ResponseEntity.ok(bookFacade.getBookCover(id));
     }
 
-
 }
