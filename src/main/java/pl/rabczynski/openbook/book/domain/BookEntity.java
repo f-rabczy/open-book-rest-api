@@ -62,7 +62,7 @@ public class BookEntity {
         this.authors.add(author);
     }
 
-    public void initializeBookRating(int oneStar, int twoStar, int threeStar, int fourStar, int fiveStar) {
+    public void initializeBookRatingContainer(int oneStar, int twoStar, int threeStar, int fourStar, int fiveStar) {
         this.bookRatingContainer = new BookRatingContainer(oneStar, twoStar, threeStar, fourStar, fiveStar);
         this.averageRating = bookRatingContainer.calculateAverage();
     }

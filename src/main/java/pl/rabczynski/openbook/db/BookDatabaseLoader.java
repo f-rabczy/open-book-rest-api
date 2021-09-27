@@ -90,7 +90,7 @@ class BookDatabaseLoader implements ApplicationListener<ContextRefreshedEvent> {
         book.setPublicationYear(Integer.parseInt(csvRecord.get(PUBLICATION_YEAR_COLUMN)));
         book.setAverageRating(Double.parseDouble(csvRecord.get(AVERAGE_RATING_COLUMN)));
         book.setImageUrl(csvRecord.get(IMAGE_URL_COLUMN));
-        book.initializeBookRating(
+        book.initializeBookRatingContainer(
                 Integer.parseInt(csvRecord.get(ONE_STAR_RATING_COLUMN)),
                 Integer.parseInt(csvRecord.get(TWO_STAR_RATING_COLUMN)),
                 Integer.parseInt(csvRecord.get(THREE_STAR_RATING_COLUMN)),
