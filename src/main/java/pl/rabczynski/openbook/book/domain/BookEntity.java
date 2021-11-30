@@ -5,7 +5,7 @@ import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import pl.rabczynski.openbook.author.AuthorEntity;
+import pl.rabczynski.openbook.author.domain.AuthorEntity;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
@@ -19,7 +19,6 @@ import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
 
-//TODO review model and rating model
 @Getter
 @Setter
 @Table(name = "books")

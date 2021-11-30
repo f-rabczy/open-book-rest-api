@@ -1,21 +1,18 @@
 package pl.rabczynski.openbook.book.domain;
 
-import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import pl.rabczynski.openbook.author.AuthorEntity;
-import pl.rabczynski.openbook.author.AuthorFacade;
+import pl.rabczynski.openbook.author.domain.AuthorEntity;
+import pl.rabczynski.openbook.author.domain.AuthorService;
 import pl.rabczynski.openbook.author.dto.AuthorDTO;
 import pl.rabczynski.openbook.author.mapper.AuthorMapper;
 import pl.rabczynski.openbook.book.dto.BookDTO;
 
 import java.net.URI;
-import java.util.Base64;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -24,10 +21,10 @@ import static pl.rabczynski.openbook.utill.PageHelper.PAGE_SIZE;
 
 @Service
 @RequiredArgsConstructor
-public class BookFacade {
+public class BookService {
 
     private final BookRepository bookRepository;
-    private final AuthorFacade authorFacade;
+    private final AuthorService authorService;
     private final AuthorMapper authorMapper;
     private final RestTemplate restTemplate;
 
@@ -37,9 +34,9 @@ public class BookFacade {
     }
 
     public BookDTO getBookWithAuthors(Integer id) {
-        BookDTO book = bookRepository.findBookDtoUsingId(id)
+        var book = bookRepository.findBookDtoUsingId(id)
                 .orElseThrow(() -> new IllegalArgumentException("No book found with given id: " + id));
-        Set<AuthorEntity> authors = authorFacade.findAuthorsByBookId(id);
+        var authors = authorService.findAuthorsByBookId(id);
         book.setAuthors(authors.stream()
                 .map(authorMapper::authorToAuthorDTO)
                 .collect(Collectors.toSet()));
@@ -52,7 +49,7 @@ public class BookFacade {
         var ids = books.stream()
                 .map(BookDTO::getId)
                 .collect(Collectors.toList());
-        var authors = authorFacade.findAllAuthorsWithIds(ids);
+        var authors = authorService.findAllAuthorsWithIds(ids);
         books.forEach(book -> book.setAuthors(extractAuthors(authors, book.getId())));
         return books;
     }

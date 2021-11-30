@@ -7,10 +7,10 @@ import org.apache.commons.csv.CSVRecord;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
-import pl.rabczynski.openbook.author.AuthorEntity;
-import pl.rabczynski.openbook.author.AuthorFacade;
+import pl.rabczynski.openbook.author.domain.AuthorEntity;
+import pl.rabczynski.openbook.author.domain.AuthorService;
 import pl.rabczynski.openbook.book.domain.BookEntity;
-import pl.rabczynski.openbook.book.domain.BookFacade;
+import pl.rabczynski.openbook.book.domain.BookService;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -38,14 +38,14 @@ class BookDatabaseLoader implements ApplicationListener<ContextRefreshedEvent> {
     private static final String FIVE_STAR_RATING_COLUMN = "ratings_5";
     private static final String IMAGE_URL_COLUMN = "image_url";
 
-    private final BookFacade bookFacade;
-    private final AuthorFacade authorFacade;
+    private final BookService bookService;
+    private final AuthorService authorService;
     private final Set<String> optimizationAuthorsSet = new HashSet<>();
 
-    BookDatabaseLoader(final BookFacade bookFacade,
-                       final AuthorFacade authorFacade) {
-        this.bookFacade = bookFacade;
-        this.authorFacade = authorFacade;
+    BookDatabaseLoader(final BookService bookService,
+                       final AuthorService authorService) {
+        this.bookService = bookService;
+        this.authorService = authorService;
     }
 
     @SneakyThrows
@@ -63,8 +63,8 @@ class BookDatabaseLoader implements ApplicationListener<ContextRefreshedEvent> {
                 addMultipleAuthors(authorsColumn, book);
             else
                 addSingleAuthor(authorsColumn, book);
-            bookFacade.save(book);
-            authorFacade.saveAll(book.getAuthors());
+            bookService.save(book);
+            authorService.saveAll(book.getAuthors());
             addToOptimizationSet(book.getAuthors());
         }
     }
@@ -72,7 +72,7 @@ class BookDatabaseLoader implements ApplicationListener<ContextRefreshedEvent> {
     private void addSingleAuthor(String authorName, BookEntity book) {
         var author = new AuthorEntity();
         if (optimizationAuthorsSet.contains(authorName))
-            author = authorFacade.getAuthorByFullName(authorName);
+            author = authorService.getAuthorByFullName(authorName);
         else
             author.setFullName(authorName);
         author.addBook(book);
