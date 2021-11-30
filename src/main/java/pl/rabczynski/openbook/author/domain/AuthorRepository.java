@@ -1,8 +1,8 @@
-package pl.rabczynski.openbook.author;
+package pl.rabczynski.openbook.author.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import pl.rabczynski.openbook.author.dto.AuthorDTO;
+import pl.rabczynski.openbook.author.domain.AuthorEntity;
 
 import java.util.List;
 import java.util.Set;

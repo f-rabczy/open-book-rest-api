@@ -1,18 +1,17 @@
-package pl.rabczynski.openbook.author;
+package pl.rabczynski.openbook.author.domain;
 
 
 import org.springframework.stereotype.Service;
-import pl.rabczynski.openbook.author.dto.AuthorDTO;
 
 import java.util.List;
 import java.util.Set;
 
 @Service
-public class AuthorFacade {
+public class AuthorService {
 
     private final AuthorRepository authorRepository;
 
-    AuthorFacade(AuthorRepository authorRepository) {
+    AuthorService(AuthorRepository authorRepository) {
         this.authorRepository = authorRepository;
     }
 

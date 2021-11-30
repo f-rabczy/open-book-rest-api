@@ -1,4 +1,4 @@
-package pl.rabczynski.openbook.author;
+package pl.rabczynski.openbook.author.domain;
 
 
 import com.sun.istack.NotNull;
