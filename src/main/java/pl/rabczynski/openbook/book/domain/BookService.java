@@ -66,6 +66,10 @@ public class BookService {
 
     }
 
+    public boolean checkIfAnyBookExist() {
+        return bookRepository.findAnyBookId().isEmpty();
+    }
+
     private Set<AuthorDTO> extractAuthors(List<AuthorEntity> authors, Integer id) {
         return authors.stream()
                 .filter(author -> isBookAuthor(author.getBooks(), id))
