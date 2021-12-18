@@ -13,22 +13,22 @@ import java.util.Optional;
 @Repository
 interface BookRepository extends JpaRepository<BookEntity, Integer> {
 
-    @Query(value = "SELECT NEW pl.rabczynski.openbook.book.dto.BookDTO(b.id,b.publicationYear,b.title,b.averageRating) " +
-            "FROM books b",
-            countQuery = "SELECT  COUNT (b) FROM books  b")
+    @Query(value = "select new pl.rabczynski.openbook.book.dto.BookDTO(b.id,b.publicationYear,b.title,b.averageRating) " +
+            "from books b",
+            countQuery = "select count (b) from books  b")
     Page<BookDTO> findAllBookDto(Pageable page);
 
-    @Query(value = "SELECT NEW pl.rabczynski.openbook.book.dto.BookDTO(b.id,b.isbn,b.publicationYear,b.title,b.averageRating,b.bookRatingContainer.ratingsCount)" +
-            " FROM books b WHERE b.id =:id ")
+    @Query(value = "select new pl.rabczynski.openbook.book.dto.BookDTO(b.id,b.isbn,b.publicationYear,b.title,b.averageRating,b.bookRatingContainer.ratingsCount)" +
+            " from books b where b.id =:id ")
     Optional<BookDTO> findBookDtoUsingId(Integer id);
 
-    @Query(value = "SELECT NEW pl.rabczynski.openbook.book.dto.BookDTO(b.id,b.title,b.bookRatingContainer.oneStar,b.bookRatingContainer.twoStar," +
+    @Query(value = "select new pl.rabczynski.openbook.book.dto.BookDTO(b.id,b.title,b.bookRatingContainer.oneStar,b.bookRatingContainer.twoStar," +
             "b.bookRatingContainer.threeStar,b.bookRatingContainer.fourStar," +
             "b.bookRatingContainer.fiveStar,b.averageRating,b.bookRatingContainer.ratingsCount)" +
-            " FROM books b WHERE b.id =:id")
+            " from books b where b.id =:id")
     Optional<BookDTO> findBookDtoWithRatingUsingId(Integer id);
 
-    @Query(value = "SELECT b.imageUrl FROM books b WHERE b.id =:id")
+    @Query(value = "select b.imageUrl from books b where b.id =:id")
     Optional<String> findBookImageUrlUsingId(Integer id);
 
     @Query(nativeQuery = true, value = "select id from books limit 1 ")
