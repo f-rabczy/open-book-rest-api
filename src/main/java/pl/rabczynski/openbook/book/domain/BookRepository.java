@@ -30,4 +30,7 @@ interface BookRepository extends JpaRepository<BookEntity, Integer> {
 
     @Query(value = "SELECT b.imageUrl FROM books b WHERE b.id =:id")
     Optional<String> findBookImageUrlUsingId(Integer id);
+
+    @Query(nativeQuery = true, value = "select id from books limit 1 ")
+    Optional<Integer> findAnyBookId();
 }
