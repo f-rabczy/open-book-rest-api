@@ -1,5 +1,6 @@
 package pl.rabczynski.openbook.db;
 
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -22,6 +23,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 class BookDatabaseLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     private static final String FILE_NAME = "E:\\IdeaProjects\\open-book\\src\\main\\resources\\static\\books_database.csv";
@@ -42,16 +44,12 @@ class BookDatabaseLoader implements ApplicationListener<ContextRefreshedEvent> {
     private final AuthorService authorService;
     private final Set<String> optimizationAuthorsSet = new HashSet<>();
 
-    BookDatabaseLoader(final BookService bookService,
-                       final AuthorService authorService) {
-        this.bookService = bookService;
-        this.authorService = authorService;
-    }
 
     @SneakyThrows
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-//      readRecordsAndCreateEntities();
+        if (bookService.checkIfAnyBookExist())
+            readRecordsAndCreateEntities();
     }
 
     private void readRecordsAndCreateEntities() throws IOException {
