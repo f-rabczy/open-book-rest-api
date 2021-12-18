@@ -44,8 +44,9 @@ public class UserService {
     }
 
     private UserRoleEntity fetchOrCreateUserRoleEntity(Role role) {
-        return userRoleRepository.findByName(role) != null ?
-                userRoleRepository.findByName(role) :
+        UserRoleEntity userRoleEntity = userRoleRepository.findByName(role);
+        return userRoleEntity != null ?
+                userRoleEntity :
                 userMapper.mapRoleEnumToUserRoleEntity(role);
     }
 }
