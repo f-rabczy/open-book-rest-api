@@ -3,6 +3,7 @@ package pl.rabczynski.openbook.user.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.FieldNameConstants;
 import pl.rabczynski.openbook.auth.domain.enums.Role;
 
 import javax.persistence.Entity;
@@ -18,6 +19,7 @@ import javax.persistence.Table;
 @Entity(name = "roles")
 @Table(name = "roles")
 @NoArgsConstructor
+@FieldNameConstants
 public class UserRoleEntity {
 
     @Id

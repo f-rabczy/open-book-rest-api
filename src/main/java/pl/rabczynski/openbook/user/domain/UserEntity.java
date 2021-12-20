@@ -3,6 +3,7 @@ package pl.rabczynski.openbook.user.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.FieldNameConstants;
 import pl.rabczynski.openbook.book.domain.BookRatingEntity;
 import pl.rabczynski.openbook.book.domain.BookReviewEntity;
 import pl.rabczynski.openbook.book.domain.BookShelfEntity;
@@ -28,6 +29,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity(name = "users")
 @Table(name = "users")
+@FieldNameConstants
 public class UserEntity {
 
     @Id

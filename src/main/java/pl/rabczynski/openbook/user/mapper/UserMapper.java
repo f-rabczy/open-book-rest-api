@@ -18,10 +18,10 @@ public abstract class UserMapper {
     @Autowired
     private PasswordEncoder encoder;
 
-    @Mapping(target = "password", source = "source", qualifiedByName = "encodePassword")
+    @Mapping(target = UserEntity.Fields.password, source = "source", qualifiedByName = "encodePassword")
     public abstract UserEntity mapUserCreateRequestToUserEntity(UserCreateRequest source);
 
-    @Mapping(target = "name", source = "role")
+    @Mapping(target = UserRoleEntity.Fields.name, source = "role")
     public abstract UserRoleEntity mapRoleEnumToUserRoleEntity(Role role);
 
     public abstract UserDTO mapUserEntityToUserDTO(UserEntity source);
