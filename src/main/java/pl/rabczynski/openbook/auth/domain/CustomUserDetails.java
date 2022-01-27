@@ -1,5 +1,6 @@
 package pl.rabczynski.openbook.auth.domain;
 
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,11 +10,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Getter
 public class CustomUserDetails implements UserDetails {
     private final String userName;
     private final String password;
     private final boolean active;
     private final List<GrantedAuthority> authorities;
+    private final Integer id;
 
     public CustomUserDetails(UserEntity user) {
         this.userName = user.getUsername();
@@ -22,6 +25,7 @@ public class CustomUserDetails implements UserDetails {
         this.authorities = user.getRoleEntities().stream()
                 .map(roleEntity -> new SimpleGrantedAuthority(roleEntity.getName().name()))
                 .collect(Collectors.toList());
+        this.id = user.getId();
     }
 
     @Override
@@ -58,4 +62,6 @@ public class CustomUserDetails implements UserDetails {
     public boolean isEnabled() {
         return active;
     }
+
+
 }
