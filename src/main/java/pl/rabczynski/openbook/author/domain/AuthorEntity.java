@@ -21,7 +21,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity(name = "authors")
+@Entity
 @Table(name = "authors")
 public class AuthorEntity {
 

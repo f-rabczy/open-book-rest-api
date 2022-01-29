@@ -23,7 +23,7 @@ import java.util.Set;
 @Setter
 @Table(name = "books")
 @NoArgsConstructor
-@Entity(name = "books")
+@Entity
 public class BookEntity {
 
     @Id

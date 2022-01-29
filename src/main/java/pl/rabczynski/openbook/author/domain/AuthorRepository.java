@@ -8,12 +8,12 @@ import java.util.Set;
 
 interface AuthorRepository extends JpaRepository<AuthorEntity, Integer> {
 
-    @Query("select a from authors a join fetch a.books where a.fullName =?1")
+    @Query("select a from AuthorEntity a join fetch a.books where a.fullName =?1")
     AuthorEntity getAuthorWithBooksByFullName(String fullName);
 
-    @Query("select a from authors a join fetch a.books b where b.id in ?1")
+    @Query("select a from AuthorEntity a join fetch a.books b where b.id in ?1")
     List<AuthorEntity> findAllByBooksIdIn(List<Integer> ids);
 
-    @Query("select a from authors a join fetch a.books b where b.id = ?1")
+    @Query("select a from AuthorEntity a join fetch a.books b where b.id = ?1")
     Set<AuthorEntity> findAuthorsDTOByBooksId(Integer id);
 }

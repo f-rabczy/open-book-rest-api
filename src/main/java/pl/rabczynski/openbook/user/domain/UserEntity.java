@@ -27,7 +27,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity(name = "users")
+@Entity
 @Table(name = "users")
 @FieldNameConstants
 public class UserEntity {
@@ -42,6 +42,7 @@ public class UserEntity {
     private String username;
 
     @NotNull
+    @Column
     private String password;
 
     @NotNull
